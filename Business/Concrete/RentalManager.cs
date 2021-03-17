@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constans;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -19,11 +22,14 @@ namespace Business.Concrete
         {
             _rentalDal = rentalDal;
         }
+        
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental rental)
         {
-            if (rental.ReturnDate==null)
+            var result=BusinessRules.Run(CheckIfCarIsReturned(rental));
+            if (result!=null)
             {
-                return new ErrorResult(Messages.RentalReturnDateNull);
+                return result;
             }
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalAdded);
@@ -42,23 +48,37 @@ namespace Business.Concrete
 
         public IDataResult<Rental> GetById(int id)
         {
-            return new SuccessDataResult<Rental>(_rentalDal.GetById(p => p.Id == id));
+            return new SuccessDataResult<Rental>(_rentalDal.Get(p => p.Id == id));
         }
 
-        public IDataResult<Rental> GetCarsByCardId(int id)
+        public IDataResult<Rental> GetCarsByCarId(int id)
         {
-            return new SuccessDataResult<Rental>(_rentalDal.GetById(p => p.CarId == id));
+            return new SuccessDataResult<Rental>(_rentalDal.Get(p => p.CarId == id));
         }
 
         public IDataResult<Rental> GetCarsByCustomerId(int id)
         {
-            return new SuccessDataResult<Rental>(_rentalDal.GetById(p => p.CustomerId == id));
+            return new SuccessDataResult<Rental>(_rentalDal.Get(p => p.CustomerId == id));
         }
-
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Update(Rental rental)
         {
             _rentalDal.Update(rental);
             return new SuccessResult(Messages.RentalUpdated);
         }
+        private IResult CheckIfCarIsReturned(Rental rental)
+        {
+            var result = _rentalDal.GetAll(c => c.CarId == rental.CarId);
+            foreach (var car in result)
+            {
+                var isPast=DateTime.Compare(rental.RentDate,car.ReturnDate);
+                if (isPast==-1)
+                {
+                    return new ErrorResult(Messages.CarNotReturned);
+                }
+            }
+            return new SuccessResult();
+        }
+     
     }
 }

@@ -8,7 +8,7 @@ namespace Business.Abstract
 {
     public interface IRentalService
     {
-        IDataResult<Rental> GetCarsByCardId(int id);
+        IDataResult<Rental> GetCarsByCarId(int id);
         IDataResult<Rental> GetCarsByCustomerId(int id);
         IDataResult<List<Rental>> GetAll();
         IDataResult<Rental> GetById(int id);
