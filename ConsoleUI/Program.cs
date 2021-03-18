@@ -23,32 +23,32 @@ namespace ConsoleUI
             }
         }
     }
-    class Personel
-    {
-        public int Id { get; set; }
-        public string Adi { get; set; }
-        public string SoyAdi { get; set; }
-    }
+    //class Personel
+    //{
+    //    public int Id { get; set; }
+    //    public string Adi { get; set; }
+    //    public string SoyAdi { get; set; }
+    //}
 
-    class Personeller : IEnumerable<Personel>
-    {
-        List<Personel> PersonelListesi = new List<Personel>();
-        public void Add(Personel p)
-        {
-            PersonelListesi.Add(p);
-        }
-        //public IEnumerator<Personel> GetEnumerator()
-        //{
-        //    return PersonelListesi.GetEnumerator();
-        //}
-        public IEnumerator<Personel> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+    //class Personeller : IEnumerable<Personel>
+    //{
+    //    List<Personel> PersonelListesi = new List<Personel>();
+    //    public void Add(Personel p)
+    //    {
+    //        PersonelListesi.Add(p);
+    //    }
+    //    //public IEnumerator<Personel> GetEnumerator()
+    //    //{
+    //    //    return PersonelListesi.GetEnumerator();
+    //    //}
+    //    public IEnumerator<Personel> GetEnumerator()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    IEnumerator IEnumerable.GetEnumerator()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }
