@@ -7,6 +7,7 @@ using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -66,6 +67,12 @@ namespace Business.Concrete
             _rentalDal.Update(rental);
             return new SuccessResult(Messages.RentalUpdated);
         }
+
+        public IDataResult<List<RentalDetailDto>> GetRentalDetail()
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
+        }
+
         private IResult CheckIfCarIsReturned(Rental rental)
         {
             var result = _rentalDal.GetAll(c => c.CarId == rental.CarId);
@@ -79,6 +86,6 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-     
+
     }
 }
